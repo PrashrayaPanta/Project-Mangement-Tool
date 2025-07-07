@@ -1,10 +1,17 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function Form() {
   const [projectTitle, setProjectTitle] = useState("");
   const [projectDeadline, setProjectDeadline] = useState("");
   const [projectTasks, setProjectTasks] = useState([{ title: "", status: "Todo", deadline: "" }]);
+
+
+  const navigate = useNavigate()
+
+
+  
 
   const handleTaskChange = (index, field, value) => {
     const updatedTasks = [...projectTasks];
@@ -31,10 +38,15 @@ export default function Form() {
       setProjectTitle("");
       setProjectDeadline("");
       setProjectTasks([{ title: "", status: "Todo", deadline: "" }]);
+      navigate("/projects");
+      
     } catch (err) {
       console.log(err.message);
     }
   };
+
+
+
 
   return (
     <form>

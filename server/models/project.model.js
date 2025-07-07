@@ -14,12 +14,9 @@ const projectSchema = new Schema({
     },
 
     tasks: [
-        
         {
-
             title:{
                 type: String,
-                required:true
             },
 
 
