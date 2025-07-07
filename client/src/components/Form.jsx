@@ -1,155 +1,170 @@
-import { PhotoIcon, UserCircleIcon } from '@heroicons/react/24/solid'
-import { ChevronDownIcon } from '@heroicons/react/16/solid'
-
-import { useState } from 'react'
-import axios from 'axios';
-
-
+import { useState } from "react";
+import axios from "axios";
 
 export default function Form() {
+  const [projectTitle, setProjectTitle] = useState("");
+  const [projectDeadline, setProjectDeadline] = useState("");
+  const [projectTasks, setProjectTasks] = useState([{ title: "", status: "Todo", deadline: "" }]);
 
-    const [projectName, setProjectName] = useState("");
+  const handleTaskChange = (index, field, value) => {
+    const updatedTasks = [...projectTasks];
+    updatedTasks[index][field] = value;
+    setProjectTasks(updatedTasks);
+  };
 
-    console.log(projectName);
-    
-  
-    const [date, setDate] = useState("");
+  const addTask = () => {
+    setProjectTasks([...projectTasks, { title: "", status: "Todo", deadline: "" }]);
+  };
 
-    console.log(date);
+  const removeTask = (index) => {
+    const updatedTasks = projectTasks.filter((_, i) => i !== index);
+    setProjectTasks(updatedTasks);
+  };
 
-
-
-    function handleSubmit(){
-
-        console.log(projectName, date);
-        
-
-         async function PostData(){
-
-            try{
-                await axios.post("http://localhost:3000/projects", {projectName, date});
-
-            }catch(err){
-
-                console.log(err.message);
-                
-
-            }
-
-              
-
-            }
-
-
-         PostData();
-
-
-         setProjectName("");
-         setDate("");
-
-
+  const handleSubmit = async () => {
+    try {
+      await axios.post("http://localhost:3000/projects", {
+        title: projectTitle,
+        deadline: projectDeadline,
+        tasks: projectTasks,
+      });
+      setProjectTitle("");
+      setProjectDeadline("");
+      setProjectTasks([{ title: "", status: "Todo", deadline: "" }]);
+    } catch (err) {
+      console.log(err.message);
     }
-    
+  };
 
   return (
     <form>
       <div className="space-y-12">
+        {/* Project Section */}
         <div className="border-b border-gray-900/10 pb-12">
           <h2 className="text-md font-bold text-gray-900">Create Project</h2>
           <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
             <div className="sm:col-span-4">
-              <label htmlFor="username" className="block text-sm/6 font-medium text-gray-900">
-                Project Name
+              <label
+                htmlFor="title"
+                className="block text-sm font-medium text-gray-900"
+              >
+                Project Title
               </label>
-              <div className="mt-2">
-                <div className="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
-                  <div className="shrink-0 text-base text-gray-500 select-none sm:text-sm/6"></div>
-                  <input
-                    id="username"
-                    name="username"
-                    type="text"
-                    placeholder="janesmith"
-                    className="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6"
-                    onChange={(e) => setProjectName(e.target.value)}
-                    value={projectName}
-                  />
-                </div>
-              </div>
+              <input
+                id="title"
+                name="title"
+                type="text"
+                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                onChange={(e) => setProjectTitle(e.target.value)}
+                value={projectTitle}
+              />
             </div>
-
+            <div className="sm:col-span-3">
+              <label
+                htmlFor="deadline"
+                className="block text-sm font-medium text-gray-900"
+              >
+                Project Deadline
+              </label>
+              <input
+                id="deadline"
+                name="deadline"
+                type="date"
+                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                onChange={(e) => setProjectDeadline(e.target.value)}
+                value={projectDeadline}
+              />
+            </div>
           </div>
         </div>
 
+        {/* Tasks Section */}
         <div className="border-b border-gray-900/10 pb-12">
-            <h2 className="text-md font-bold text-gray-900">Tasks</h2>
-
-          <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-            <div className="sm:col-span-3">
-              <label htmlFor="first-name" className="block text-sm/6 font-medium text-gray-900">
-                    Name
-              </label>
-              <div className="mt-2">
-                <input
-                  id="first-name"
-                  name="first-name"
-                  type="text"
-                  autoComplete="given-name"
-                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                />
-              </div>
-            </div>
-
-
-
-            <div className="sm:col-span-3">
-              <label htmlFor="status" className="block text-sm/6 font-medium text-gray-900">
-                Status
-              </label>
-              <div className="mt-2 grid grid-cols-1">
-                <select
-                  id="status"
-                  name="status"
-                  autoComplete="country-name"
-                  className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+          <h2 className="text-md font-bold text-gray-900">Tasks</h2>
+          {projectTasks.map((task, index) => (
+            <div key={index} className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+              <div className="sm:col-span-3">
+                <label
+                  htmlFor={`task-title-${index}`}
+                  className="block text-sm font-medium text-gray-900"
                 >
-                    <option value="">Status</option>
-                  <option>Todo</option>
-                  <option>doing</option>
-                  <option>completed</option>
-                </select>
-                <ChevronDownIcon
-                  aria-hidden="true"
-                  className="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4"
+                  Task Title
+                </label>
+                <input
+                  id={`task-title-${index}`}
+                  name={`task-title-${index}`}
+                  type="text"
+                  className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  onChange={(e) => handleTaskChange(index, "title", e.target.value)}
+                  value={task.title}
                 />
               </div>
+              <div className="sm:col-span-2">
+                <label
+                  htmlFor={`task-status-${index}`}
+                  className="block text-sm font-medium text-gray-900"
+                >
+                  Status
+                </label>
+                <select
+                  id={`task-status-${index}`}
+                  name={`task-status-${index}`}
+                  className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  onChange={(e) => handleTaskChange(index, "status", e.target.value)}
+                  value={task.status}
+                >
+                  <option value="Todo">Todo</option>
+                  <option value="Doing">Doing</option>
+                  <option value="Completed">Completed</option>
+                </select>
+              </div>
+              <div className="sm:col-span-3">
+                <label
+                  htmlFor={`task-deadline-${index}`}
+                  className="block text-sm font-medium text-gray-900"
+                >
+                  Task Deadline
+                </label>
+                <input
+                  id={`task-deadline-${index}`}
+                  name={`task-deadline-${index}`}
+                  type="date"
+                  className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  onChange={(e) => handleTaskChange(index, "deadline", e.target.value)}
+                  value={task.deadline}
+                />
+              </div>
+              <div className="sm:col-span-1 flex items-center">
+                <button
+                  type="button"
+                  className="text-red-500 hover:text-red-700"
+                  onClick={() => removeTask(index)}
+                >
+                  Remove
+                </button>
+              </div>
             </div>
-
-
-            <div className="sm:col-span-3">
-              <label htmlFor="status" className="block text-sm/6 font-medium text-gray-900">
-                Date
-              </label>
-                <input type="date" name="" id=""  onChange={(e) => setDate(e.target.value)}/>     
-            </div>
-
-
-          </div>
+          ))}
+          <button
+            type="button"
+            className="mt-4 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500"
+            onClick={addTask}
+          >
+            Add Task
+          </button>
         </div>
-
-  
       </div>
 
+      {/* Submit Button */}
       <div className="mt-6 flex items-center justify-end gap-x-6">
-        <button type="button" className="text-sm/6 font-semibold text-gray-900">
-          Cancel
-        </button>
         <button
-          type="button" onClick={handleSubmit}
-          className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          type="button"
+          className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500"
+          onClick={handleSubmit}
         >
           Save
         </button>
       </div>
     </form>
-  )
+  );
 }
