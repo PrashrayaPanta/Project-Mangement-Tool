@@ -1,18 +1,25 @@
 import express from 'express'
 
 
-
-
-import  ProjectController  from './controllers/Project.controlelr.js';
-
-
-
 import Project from './models/project.model.js';
 
 
 import cors from "cors";
-import mongoose, { get } from 'mongoose';
-import CreateProjectController from './controllers/Project.controlelr.js';
+import mongoose from 'mongoose';
+
+
+import { errorHandler } from './middleware/error-handler-middleware.js';
+
+
+
+// Importing routes
+import authRoute from './routes/auth.Routes.js';
+import profileRoute from './routes/profile.routes.js';
+import projectRoute from './routes/project.Routes.js';
+
+
+
+
 
 const app = express();
 
@@ -34,26 +41,57 @@ mongoose.connect('mongodb://localhost:27017/', {
 
 
 
-
-
 app.use(cors())
-
 app.use(express.json());
 
 
-app.post('/projects', CreateProjectController)
 
 
 
-app.get("/projects", async (req, res) => {
-    try {
-        const projects = await Project.find();
-        res.status(200).json(projects);
-    } catch (error) {
-        console.error(error.message);
-        res.status(500).json({ error: "Internal server error" });
-    }
-})
+
+//auth routes
+app.use("/auth", authRoute);
+
+
+
+//profile routes
+app.use("/profile", profileRoute);
+
+
+
+// Project routes
+app.use("/projects", projectRoute)
+
+
+
+
+
+
+
+
+
+//Get All The projects
+
+// app.get("/projects", async (req, res) => {
+//     try {
+//         const projects = await Project.find();
+//         res.status(200).json(projects);
+//     } catch (error) {
+//         console.error(error.message);
+//         res.status(500).json({ error: "Internal server error" });
+//     }
+// })
+
+
+
+// Get a single project by ID
+
+
+
+
+app.use(errorHandler)
+
+
 
 app.listen(3000, () =>{
     console.log(`Server is running on http://localhost:3000`);
