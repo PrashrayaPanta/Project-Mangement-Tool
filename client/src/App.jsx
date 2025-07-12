@@ -13,12 +13,15 @@ import Layout from "./components/ui/Layout";
 
 import PrivateRoute from "./Routes/PrivateRoute";
 
+
+
 //! Login
 
 import Login from "./pages/auth/Login";
 
 //! Edit
 import Edit from "./pages/Profile/Edit";
+import List from "./pages/Project/List";
 
 
 
@@ -53,9 +56,16 @@ function App() {
             <Route
               path="profile"
               element={<PrivateRoute element={<Edit />} />}
-            >
-          
+            />
+
+
+            <Route path="projects" element={<PrivateRoute element={<Outlet/>} />}>
+
+                <Route index element={<List/>} />
+
             </Route>
+          
+      
           </Route>
 
           {/* <Route path="/dashboard" element={<PrivateNavbar/>}/> */}

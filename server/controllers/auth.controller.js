@@ -1,78 +1,66 @@
+import customError from "../middleware/error-handler-middleware.js";
+import User from "../models/user.model.js";
 
-import customError from '../middleware/error-handler-middleware.js';
-import  User  from '../models/user.model.js';
+import "dotenv/config";
 
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
-import 'dotenv/config'
-
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
-
-const RegisterController = async(req, res)=>{
-
-
+const RegisterController = async (req, res, next) => {
+  try {
     const { username, email, password } = req.body;
 
     //! Empty Field Validation
-    if(!email || !username || !password){
-        throw new customError("This field is required", 400);
+    if (!email || !username || !password) {
+      throw new customError("This field is required", 400);
     }
-
-
 
     //! Email Validation
-    
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if(!emailRegex.test(email)){
-        throw new customError("Invalid email format", 400);
+    if (!emailRegex.test(email)) {
+      throw new customError("Invalid email format", 400);
     }
 
+    const userFound = await User.findOne({ email });
 
-    const userFound =   await User.findOne({email});
-
-
-    if(userFound){
-        throw new customError("User already exists", 400);
+    if (userFound) {
+      throw new customError("User already exists", 400);
     }
 
+    //! Hash the user password
 
-       //! Hash the user password
+    const salt = await bcrypt.genSalt(10);
 
-       const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
 
-       const hashedPassword = await bcrypt.hash(password, salt);
-   
-       //! create the user
-   
-  
-         
-         const userCreated = await User.create({
-           username,
-           password: hashedPassword,
-           email,
-           profileImageUrl: req?.file?.path,
-  
-         });
-   
-         console.log(userCreated);
-   
-         //! send the response
-   
-         res.json({
-           message: "Register Success",
-           username: userCreated.username,
-           email: userCreated.email,
-           id: userCreated._id,
-         })
+    //! create the user
 
-}
+    const userCreated = await User.create({
+      username,
+      password: hashedPassword,
+      email,
+      profileImageUrl: req?.file?.path,
+    });
 
+    console.log(userCreated);
 
-const LoginController = async(req, res) =>{
+    //! send the response
 
+    res.json({
+      message: "Register Success",
+      username: userCreated.username,
+      email: userCreated.email,
+      id: userCreated._id,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 
-  console.log("Helo I am iunside login controler");
-  
+const LoginController = async (req, res, next) => {
+  try {
+    console.log("Helo I am iunside login controler");
 
     const { email, password } = req.body;
 
@@ -94,7 +82,9 @@ const LoginController = async(req, res) =>{
 
     //! Genrate the token
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "30d" });
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "30d",
+    });
 
     res.json({
       message: "Login Success",
@@ -103,8 +93,9 @@ const LoginController = async(req, res) =>{
       email: user.email,
       username: user.username,
     });
+  } catch (error) {
+    next(error);
+  }
+};
 
-}
-
-
-export {RegisterController, LoginController}
+export { RegisterController, LoginController };

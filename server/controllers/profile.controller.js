@@ -10,7 +10,7 @@ import jwt from 'jsonwebtoken';
 
 const GetProfileController = async(req, res)=>{
 
-
+  try{
 
     //The loginned user is present in req.user
 
@@ -25,6 +25,13 @@ const GetProfileController = async(req, res)=>{
         message: "User Profile",
         user
     });
+
+
+  }catch(error){
+
+    next(error);
+
+  }
          
       
 
@@ -33,7 +40,7 @@ const GetProfileController = async(req, res)=>{
 
 const EditProfileController = async(req, res) =>{
 
-
+  try{
     const { username, email } = req.body;
 
 
@@ -69,13 +76,20 @@ const EditProfileController = async(req, res) =>{
     res.status(201).json({ message: "Updated Succesfully", user: updatedUser });
 
  
+  }catch(error){
 
+    next(error);
+
+  } 
 
 }
 
 
 
 const ChangePasswordController = async(req, res) =>{
+
+
+  try{
 
        //! Updating the password
 
@@ -111,6 +125,12 @@ const ChangePasswordController = async(req, res) =>{
        res
          .json({ message: "Updated the password", data: userupdated })
          .status(201);
+
+
+      }catch(error){
+
+        next(error)
+      }
 
 }
 

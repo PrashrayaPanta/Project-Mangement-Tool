@@ -10,8 +10,6 @@ export default function Form() {
 
   const navigate = useNavigate()
 
-
-
   const handleTaskChange = (index, field, value) => {
     const updatedTasks = [...projectTasks];
     updatedTasks[index][field] = value;
