@@ -1,26 +1,74 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom"
-import Form from "./components/Form"
-import ProjectsList from "./components/ProjectsList"
-import { CardDemo } from "./pages/auth/Login"
+import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
+// import Form from "./components/Form";
+// import ProjectsList from "./components/ProjectsList";
+// import { CardDemo } from "./pages/auth/Login"
+
+// import PrivateNavbar from "./components/ui/PrivateNavbar";
+// import UserProfile from "./components/ui/UserProfile"
+// import { AppSidebar } from "./components/sidebar"
+
+
+import Dashboard from "./components/ui/Dashboard";
+import Layout from "./components/ui/Layout";
+
+import PrivateRoute from "./Routes/PrivateRoute";
+
+//! Login
+
+import Login from "./pages/auth/Login";
+
+//! Edit
+import Edit from "./pages/Profile/Edit";
+
+
 
 
 
 function App() {
-
-
   return (
     <>
-
       <BrowserRouter>
         <Routes>
-            <Route path="/login" element={<CardDemo/>}/>
-            <Route path="/projects" element={<ProjectsList/>}/>
-            <Route path="/projects/create" element={<Form/>}/>
+          <Route path="/" element={<Layout />}>
+            <Route path="/login" element={<Login />} />
+
+            <Route index element={<PrivateRoute element={<Dashboard />} />} />
+
+
+               {/* <Route
+              path="profile/edit"
+              element={<PrivateRoute element={<Pages.Profile.Edit />} />}
+            />
+            <Route
+              path="profile/password"
+              element={<PrivateRoute element={<Pages.Profile.Password />} />}
+            /> */}
+
+            {/* <Route path="profile" element={<PrivateRoute element={<Outlet/>}  />}
+              
+            </Route> */}
+
+            {/* Profile Route */}
+
+            <Route
+              path="profile"
+              element={<PrivateRoute element={<Edit />} />}
+            >
+          
+            </Route>
+          </Route>
+
+          {/* <Route path="/dashboard" element={<PrivateNavbar/>}/> */}
+          {/* <Route path="/register" element={<Register/>}/>
+            <Route path="/projects/create" element={<Form/>}/> */}
+          {/* <Route path="/profile" element={<UserProfile />} /> */}
+          {/* <Route path="/dashboard" element={<AppSidebar/>}/> */}
+
+          {/* <Route path="/dashboard/cr"/> */}
         </Routes>
-      
       </BrowserRouter>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

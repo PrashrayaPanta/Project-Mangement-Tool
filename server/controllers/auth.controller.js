@@ -70,6 +70,10 @@ const RegisterController = async(req, res)=>{
 
 const LoginController = async(req, res) =>{
 
+
+  console.log("Helo I am iunside login controler");
+  
+
     const { email, password } = req.body;
 
     //! check if user email exits
@@ -99,10 +103,6 @@ const LoginController = async(req, res) =>{
       email: user.email,
       username: user.username,
     });
-
-
-
-
 
 }
 
