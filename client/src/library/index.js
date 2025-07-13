@@ -1,8 +1,8 @@
-// import dayjs from "dayjs";
+import dayjs from "dayjs";
 
-// import LocalizedFormat from "dayjs/plugin/localizedFormat";
+import LocalizedFormat from "dayjs/plugin/localizedFormat";
 
-// dayjs.extend(LocalizedFormat);
+dayjs.extend(LocalizedFormat);
 
 export const BackendvalidationError = (formik, response) => {
   // console.log(response);
@@ -31,7 +31,7 @@ export const ClearStorage = (key) => {
   sessionStorage.clear(key);
 };
 
-// export const dtFormat = (dt, format = "lll") => dayjs(dt).format(format);
+export const dtFormat = (dt, format = "lll") => dayjs(dt).format(format);
 
 export const imgURL = (filename) => {
   // console.log(`import.meta.env.VITE_API_URL/image/${filename}`);

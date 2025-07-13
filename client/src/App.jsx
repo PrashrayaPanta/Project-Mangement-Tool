@@ -15,13 +15,34 @@ import PrivateRoute from "./Routes/PrivateRoute";
 
 
 
+
+
+
+
 //! Login
 
 import Login from "./pages/auth/Login";
 
-//! Edit
+//! Edit Profile
 import Edit from "./pages/Profile/Edit";
+
+
+
+//! List Projects
 import List from "./pages/Project/List";
+
+//! Create Projects
+import Create from "./pages/Project/Create";
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -59,10 +80,9 @@ function App() {
             />
 
 
-            <Route path="projects" element={<PrivateRoute element={<Outlet/>} />}>
-
+            <Route path="project" element={<PrivateRoute element={<Outlet/>} />}>
                 <Route index element={<List/>} />
-
+                <Route path="create" element={<Create/>}/> 
             </Route>
           
       

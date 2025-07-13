@@ -38,8 +38,8 @@ const EditProfileAndChangePassword = () => {
   // Formik for profile update
   const profileFormik = useFormik({
     initialValues: {
-      username: user.username,
-      email: user.email,
+      username: user?.username,
+      email: user?.email,
     },
     validationSchema: profileValidationSchema,
     onSubmit: async (values, { setSubmitting, setFieldError }) => {

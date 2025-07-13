@@ -2,11 +2,36 @@ import React from "react";
 import { CiUser } from "react-icons/ci";
 
 const InputField = ({ formik, type, name, iconComponent, label }) => {
+
+  console.log(iconComponent);
+  
   return (
     <div className="mb-4">
-      <label htmlFor={name} className="">
-        {label}
-      </label>
+      <div className="flex">
+        <label htmlFor={name}>{label}</label>
+
+        { iconComponent === undefined  ? (
+          null
+        ) : (
+          <svg
+            stroke="currentColor"
+            fill="none"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="text-red-500"
+            height="18"
+            width="18"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M12 6v12"></path>
+            <path d="M17.196 9 6.804 15"></path>
+            <path d="m6.804 9 10.392 6"></path>
+          </svg>
+        )}
+      </div>
+
       <div className="relative rounded-md shadow-sm">
         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
           {iconComponent}
@@ -15,6 +40,7 @@ const InputField = ({ formik, type, name, iconComponent, label }) => {
         <input
           type={type}
           name={name}
+          id={name}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           value={formik.values[name]}

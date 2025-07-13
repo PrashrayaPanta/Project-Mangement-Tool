@@ -1,6 +1,9 @@
 import Project from "../models/project.model.js";
 
-export default async function createProjectController(req, res) {
+export const createProject = async(req, res, next) => {
+
+
+  try{
 
   // console.log("Hello I am inside the project Controller")
 
@@ -33,12 +36,18 @@ export default async function createProjectController(req, res) {
 
     res.status(201).json({ message: "Project created successfully", project });
 
+  }catch(error){
 
+    next(error);
+
+  }
 
   }
 
 
-export const getProjects = async(rqe, res) =>{
+export const getProjects = async(req, res) =>{
+
+  try{
 
 
   const projects = await Project.find();
@@ -46,8 +55,13 @@ export const getProjects = async(rqe, res) =>{
   console.log(projects);
   
 
-
   res.json({success:true, projects})
+
+  }catch(error){
+
+      next(error);
+
+  }
 
 
 

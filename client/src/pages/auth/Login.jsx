@@ -92,16 +92,18 @@ const Login = () => {
           </p>
         </div>
 
-        <form className="mt-8 space-y-6" onSubmit={formik.handleSubmit}>
+        <form className="mt-8  space-y-5" onSubmit={formik.handleSubmit}>
           <InputField
             formik={formik}
             name="email"
+            label="Email"
             iconComponent={<FiMail className="h-5 w-5 text-gray-400" />}
           />
 
           <InputField
             formik={formik}
             name="password"
+            label="Password"
             iconComponent={<FiLock className="h-5 w-5 text-gray-400" />}
           />
 
