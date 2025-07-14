@@ -13,6 +13,13 @@ const projectSchema = new Schema({
         type: Date
     },
 
+    EnrollmentKey:{
+        type: String,
+        required:true,
+        unique:true
+
+    },
+
     tasks: [
         {
             title:{

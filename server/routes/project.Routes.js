@@ -1,5 +1,5 @@
 import express from "express";
-import { createProject } from "../controllers/Project.controller.js";
+import { createProject, getProjectsByNormalUser, getProjectTasksById, UpdateCertainProjectTask } from "../controllers/Project.controller.js";
 import isAuthenticated from "../middleware/auth.middleware.js";
 
 
@@ -7,24 +7,38 @@ import isAdmin from "../middleware/isAdmin.middleware.js";
 
 
 import { getProjects } from "../controllers/Project.controller.js";
+import { isEnrollmentKeyMatched } from "../middleware/isEnrollmentKeyMatched.js";
 
 
 
 
 
 
-
-const projectRoute = express.Router();
+const projectRoute = express.Router({ mergeParams: true });
 
 
 // User registration route
 
-projectRoute.post("/", isAuthenticated, isAdmin, createProject);
+projectRoute.post("/admin/projects", isAuthenticated, isAdmin, createProject);
 
 
 
 
-projectRoute.get("/", getProjects);
+projectRoute.get("/admin/projects", getProjects);
+
+
+projectRoute.get("/projects", getProjectsByNormalUser);
+
+
+
+projectRoute.get("/projects/:id/tasks", isEnrollmentKeyMatched, getProjectTasksById);
+
+
+projectRoute.put("/projects/:projectId/tasks/:taskId", isEnrollmentKeyMatched,  UpdateCertainProjectTask)
+
+
+
+
 
 
 

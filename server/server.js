@@ -63,7 +63,9 @@ app.use("/profile", profileRoute);
 
 
 // Project routes
-app.use("/projects", projectRoute)
+app.use("/api", projectRoute)
+
+
 
 
 

@@ -38,7 +38,7 @@ const GetProfileController = async(req, res)=>{
 }
 
 
-const EditProfileController = async(req, res) =>{
+const EditProfileController = async(req, res, next) =>{
 
   try{
     const { username, email } = req.body;
