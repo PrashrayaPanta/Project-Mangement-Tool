@@ -3,12 +3,11 @@ import Project from "../models/project.model.js";
 import dayjs from "dayjs";
 
 import LocalizedFormat from "dayjs/plugin/localizedFormat.js";
+import customError from "../middleware/error-handler-middleware.js";
 
 dayjs.extend(LocalizedFormat);
 
-
 export const dtFormat = (dt, format = "lll") => dayjs(dt).format(format);
-
 
 export const createProject = async (req, res, next) => {
   try {
@@ -66,33 +65,18 @@ export const getProjects = async (req, res) => {
   }
 };
 
-
-export const getProjectsByNormalUser = async(req, res)=>{
-
-  try{
-
-
+export const getProjectsByNormalUser = async (req, res) => {
+  try {
     const projects = await Project.find().select("-EnrollmentKey -tasks");
 
-
-
-    res.status(200).json({projects});
-
-
-  }catch(error){
-
-    next(error)
-
+    res.status(200).json({ projects });
+  } catch (error) {
+    next(error);
   }
-
-
-
-
-}
+};
 
 export const getProjectTasksById = async (req, res) => {
   try {
-
     const { id } = req.params;
 
     const projects = await Project.findById(id);
@@ -105,54 +89,31 @@ export const getProjectTasksById = async (req, res) => {
   }
 };
 
+export const UpdateCertainProjectTask = async (req, res, next) => {
+  try {
+    const { projectId, taskId } = req.params;
+    const { status } = req.body;
 
+    const project = await Project.findById(projectId);
+    if (!project) throw new customError("Project not found");
 
+    if (new Date() > new Date(project.deadline)) {
+      throw new customError("Deadline is crossed, cannot update the status");
+    }
 
+    // Update task status using findOneAndUpdate and positional operator $
+    const updatedProject = await Project.findOneAndUpdate(
+      { _id: projectId, "tasks._id": taskId },
+      { $set: { "tasks.$.status": status } },
+      { new: true }
+    );
 
+    if (!updatedProject) {
+      throw new customError("Task not found in the project");
+    }
 
-
-
-
-export const UpdateCertainProjectTask = async(req, res, next)=>{
-
-  try{
-
-
-      const {projectId} = req.params;
-
-
-      const {taskId} = req.params;
-
-
-      //Get the date and time when updation gonna takes place
-
-      console.log("Submit Garne Wala date", Date());
-
-
-      //Get the project By projectId
-      const project = await Project.findById(projectId);
-
-
-      console.log("db ma save vako wala",dtFormat(project.deadline));
-
-      //The Deadline come in UTC Format we need to convert to Nepali Time
-
-
-      
-      
-
-
-
-      
-
-
-        
-
-  }catch(err){
-
-    next(err);
+    console.log("Updated project with task status:", updatedProject);
+  } catch (error) {
+    next(error);
   }
-
-
-
-}
+};

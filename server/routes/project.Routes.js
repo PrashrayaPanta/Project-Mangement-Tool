@@ -34,9 +34,7 @@ projectRoute.get("/projects", getProjectsByNormalUser);
 projectRoute.get("/projects/:id/tasks", isEnrollmentKeyMatched, getProjectTasksById);
 
 
-projectRoute.put("/projects/:projectId/tasks/:taskId", isEnrollmentKeyMatched,  UpdateCertainProjectTask)
-
-
+projectRoute.put("/projects/:projectId/tasks/:taskId",  UpdateCertainProjectTask)
 
 
 
@@ -44,7 +42,6 @@ projectRoute.put("/projects/:projectId/tasks/:taskId", isEnrollmentKeyMatched,  
 
 
 // User login route
-
 // projectRoute.post("/login", LoginController);
 
 
