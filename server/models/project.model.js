@@ -47,6 +47,16 @@ const projectSchema = new Schema({
 
     ],
 
+
+    noofCompletedTak:{
+        type: String,
+    },
+
+    noofincompletedTasks:{
+        type: String
+    }
+
+
   },  {
 
         timestamps:true

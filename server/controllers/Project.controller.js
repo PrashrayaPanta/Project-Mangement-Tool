@@ -83,6 +83,46 @@ export const getProjectTasksById = async (req, res) => {
 
     console.log(projects);
 
+   const completedTask =  projects?.tasks.filter((task) => task.status === "Completed");
+
+
+   console.log(completedTask);
+
+
+
+   const noofCompletedTask = completedTask.length;
+
+
+   console.log(noofCompletedTask);
+   
+
+
+   const incompletedTask = projects.tasks.filter((task) => task.status !== "Completed" );
+
+
+
+   console.log(incompletedTask);
+
+
+   const noofincompletedTasks = incompletedTask.length;
+
+
+
+   console.log(noofincompletedTasks);
+   
+
+
+
+
+   console.log();
+   
+
+
+
+   
+   
+   
+
     res.status(200).json({ projects });
   } catch (error) {
     next(error);
@@ -117,3 +157,15 @@ export const UpdateCertainProjectTask = async (req, res, next) => {
     next(error);
   }
 };
+
+
+//Tracking progress
+
+
+// no of completed tasks
+
+
+// no of incompleted tasks 
+
+
+// Progess = 
