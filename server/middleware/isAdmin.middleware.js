@@ -7,6 +7,10 @@ const isAdmin = async (req, res, next) => {
   try {
     const user = await User.findById(req.user.id);
 
+    console.log(user);
+    
+
+
 
     if (!user || !user.isAdmin) {
         throw new customError("You are not authorized to perform this action", 403);

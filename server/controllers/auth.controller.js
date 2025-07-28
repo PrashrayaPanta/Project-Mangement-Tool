@@ -7,6 +7,9 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 const RegisterController = async (req, res, next) => {
+
+  console.log("I am Register Controlller");
+  
   try {
     const { username, email, password } = req.body;
 

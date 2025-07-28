@@ -4,7 +4,7 @@ import express from 'express'
 import Project from './models/project.model.js';
 
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 6000;
 
 
 import cors from "cors";
@@ -71,21 +71,26 @@ app.use("/api", projectRoute)
 
 
 
-
-
-
-
 //Get All The projects
 
-// app.get("/projects", async (req, res) => {
-//     try {
-//         const projects = await Project.find();
-//         res.status(200).json(projects);
-//     } catch (error) {
-//         console.error(error.message);
-//         res.status(500).json({ error: "Internal server error" });
-//     }
-// })
+app.get("/projects", async (req, res) => {
+    try {
+
+        res.send("Hello");
+
+        // console.log("Hello I am inside the projects Route");
+        
+        // const projects = await Project.find();
+        // res.status(200).json(projects);
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).json({ error: "Internal server error" });
+    }
+})
+
+
+
+
 
 
 
